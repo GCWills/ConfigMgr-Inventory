@@ -1,16 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>ConfigMgr.Inventory</RootNamespace>
+    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>ConfigurationManager.ManagedObjectFormat</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Title>ConfigMgr.Inventory</Title>
-    <Description>Extend and manage ConfigMgr's Hardware Inventory Schema</Description>
+    <Title>ConfigMgr Inventory Extension</Title>
+    <Description>Extend and manage ConfigMgr's Hardware Inventory Schema locally or remotely</Description>
+    <PackageId>ConfigurationManager.ManagedObjectFormat</PackageId>
+    <Company>GCWills</Company>
+    <RepositoryUrl>https://github.com/GCWills/ConfigMgr-Inventory</RepositoryUrl>
+    <PackageTags>ConfigMgr</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <VersionPrefix>1.0.2</VersionPrefix>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="7.0.2" />
   </ItemGroup>
-
 </Project>

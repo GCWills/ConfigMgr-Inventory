@@ -1,13 +1,13 @@
 ﻿using System.Management;
 using System.Text.Json;
 
-namespace ConfigMgr.Inventory
+namespace ConfigurationManager.ManagedObjectFormat
 {
 
     //Container for Extensions. Includes Json deserialisation method.
-    class Schema
+    public class Schema
     {
-        public Extension[]? InventoryExtension { get; set; }
+        public Extension[] InventoryExtension { get; set; }
 
         public static Extension[] GetFromJson(string path)
         {
@@ -15,7 +15,6 @@ namespace ConfigMgr.Inventory
             {
                 string jsonData = File.ReadAllText(path);
                 return JsonSerializer.Deserialize<Schema>(jsonData).InventoryExtension;
-
             }
             throw new NotImplementedException("File not found.");
         }
@@ -24,10 +23,11 @@ namespace ConfigMgr.Inventory
     //Represents a Class such as PMPC_UserApps. All Properties needed to extend Inventory Schema. Methods to Install, Uninstall, Enable and Disable from schema.
     public class Extension
     {
-        public string? SMSClassID { get; set; }
-        public string? ClassName { get; set; }
-        public string? SMSGroupName { get; set; }
-        public string[]? Properties { get; set; }
+        public string SMSClassID { get; set; }
+        public string SMSGroupName { get; set; }
+        public string Namespace { get; set; }
+        public string ClassName { get; set; }
+        public Dictionary<string, int> Properties { get; set; }
 
         //Adds class to the schema but doesnt enable
         public void Install(ManagementScope scope)
@@ -41,27 +41,32 @@ namespace ConfigMgr.Inventory
                     newClass["SMSClassID"] = SMSClassID;
                     newClass["ClassName"] = ClassName;
                     newClass["SMSGroupName"] = SMSGroupName;
-                    newClass["Namespace"] = "\\\\\\\\.\\\\root\\\\cimv2";
+                    newClass["Namespace"] = Namespace;
                     newClass["IsDeletable"] = true;
 
                     // Create an array of SMS_InventoryClassProperty Objects
-                    ManagementObject[] propertyValues = new ManagementObject[Properties.Length];
+                    ManagementObject[] propertyValues = new ManagementObject[Properties.Keys.Count];
                     ManagementClass propertyClass = new ManagementClass(scope, new ManagementPath("SMS_InventoryClassProperty"), null);
-                    for (int i = 0; i < Properties.Length; i++)
+
+                    //Loop through properties and spawn a SMS_InventoryClassProperty Instance to add to the ManagmentObject Array
+                    int i = 0;
+                    foreach (KeyValuePair<string, int> property in Properties)
                     {
                         // Create property instances for the class
-                        ManagementObject property = propertyClass.CreateInstance();
-                        property["PropertyName"] = Properties[i];
-                        property["Type"] = 8;
-                        property["Width"] = 2048;
+                        ManagementObject propertyObj = propertyClass.CreateInstance();
+                        propertyObj["PropertyName"] = property.Key;
+                        propertyObj["Type"] = property.Value;
+                        propertyObj["Width"] = 2048;
 
                         //First property provided will be the key because yes
                         if (i == 0)
                         {
-                            property["IsKey"] = 1;
+                            propertyObj["IsKey"] = 1;
                         }
 
-                        propertyValues[i] = property;
+                        propertyValues[i] = propertyObj;
+
+                        i++;
                     }
 
                     //Add the SMS_InventoryClassProperty[] to the SMS_InventoryClass.Properties
@@ -100,7 +105,6 @@ namespace ConfigMgr.Inventory
             {
                 Console.WriteLine($"{ClassName} : FAILED TO INSTALL...: {ex.Message} || {ex.StackTrace}");
             }
-
         }
 
         // Inventory classes may be "Installed" but not enabled for reporting. This method enables them for reporting on default client settings. This is the equivalent of ticking a class in the Hardware Inventory Client settings page.
@@ -117,7 +121,7 @@ namespace ConfigMgr.Inventory
                     {
                         newReportClass = reportClass.CreateInstance();
                         newReportClass["SMSClassID"] = SMSClassID;
-                        newReportClass["ReportProperties"] = Properties;
+                        newReportClass["ReportProperties"] = Properties.Keys.ToArray();
                         newReportClass["Timeout"] = 6000;
                     }
 
