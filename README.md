@@ -1,13 +1,13 @@
-# **InventoryExtension C# Class**
+# **ConfigMgr.Inventory**
 
 ## **Summary:**
-The **InventoryExtension** represents the **SMS_InventoryClass** SMS server class and provides a simple interface to extend and manage Configuration Managers Hardware Inventory Schema.
+Provides a simple interface to extend and manage Configuration Managers Hardware Inventory Schema through the Schema and Extension classes.
 
 ## **Usage:**
                 
 ```csharp
 //Define Inventory Extension
-InventoryExtension inventoryExtension = new InventoryExtension()
+Extension inventoryExtension = new InventoryExtension()
 {
     SMSClassID = "MICROSOFT|PMPC_USERAPPS|1.0",
     ClassName = "PMPC_UserApps",
@@ -25,17 +25,17 @@ InventoryExtension inventoryExtension = new InventoryExtension()
     }
 };
 
-//Install
-inventoryExtension.Install(scope);
+//or use schema class to get from json:
+Extension[] inventoryExtensions = Schema.GetFromJson("pathToJson")
 
-//Uninstall
-inventoryExtension.Uninstall(scope);
-
-//Enable
-inventoryExtension.Enable(scope);
-
-//Disable
-inventoryExtension.Disable(scope);
+foreach ( Extension inventoryExtension in inventoryExtensions )
+{
+  //Install
+  inventoryExtension.Install(scope)  
+  
+  //Enable
+  inventoryExtension.Enable(scope);
+}
 ```
 
 
