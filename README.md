@@ -55,10 +55,10 @@ ManagementScope scope = new ManagementScope($@"\\{smsProviderServer}\ROOT\SMS\si
 ```
 
 ## **Properties:**
-**(String) SMSClassID**: The Class ID that will be used to generate the database table, view, and the UI SDK class.
-**(String) ClassName**: The name of the WMI Class. 
-**(String) SMSGroupName**: The default class name displayed in the MOF editor and Resource Explorer if no localized resources are provided.
-**(String[]) Properties**: The list of properties belonging to the WMI Class to be inventoried. It is assumed that the first property in the array will be the key property in the database.
+- **(String) SMSClassID**: The Class ID that will be used to generate the database table, view, and the UI SDK class.
+- **(String) ClassName**: The name of the WMI Class. 
+- **(String) SMSGroupName**: The default class name displayed in the MOF editor and Resource Explorer if no localized resources are provided.
+- **(String[]) Properties**: The list of properties belonging to the WMI Class to be inventoried. It is assumed that the first property in the array will be the key property in the database.
 
 ## **Requirements:**
 - **System.Management** Namespace (Part of the .NET Framework, available as a Nuget Package in .NET Core)
