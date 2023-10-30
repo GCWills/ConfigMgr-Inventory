@@ -85,4 +85,4 @@ string scope = $@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}";
 - **(String[]) Properties**: The list of properties belonging to the WMI Class to be inventoried. It is assumed that the first property in the array will be the key property in the database.
 
 # **Requirements**
-- **System.Management** Namespace (Part of the .NET Framework, available as a Nuget Package in .NET Core)
+- **System.Management** Namespace (available as a Nuget Package in .NET Core)
