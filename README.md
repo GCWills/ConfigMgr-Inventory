@@ -1,5 +1,5 @@
 # **InventoryExtension C# Class**
-[[_TOC_]]
+
 ## **Summary:**
 The **InventoryExtension** represents the **SMS_InventoryClass** SMS server class and provides a simple interface to extend and manage Configuration Managers Hardware Inventory Schema.
 
