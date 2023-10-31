@@ -3,7 +3,6 @@ using System.Text.Json;
 
 namespace ConfigurationManager.ManagedObjectFormat
 {
-
     //Container for Extensions. Includes Json deserialisation method.
     public class Schema
     {
