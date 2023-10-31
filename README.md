@@ -1,7 +1,7 @@
-# **ConfigMgr.Inventory**
+# **ConfurationManager.ManageObjectFormat**
 
 ## **Summary:**
-Provides a simple interface to extend and manage Configuration Managers Hardware Inventory Schema through the Schema and Extension classes.
+Provides a simple interface to extend and manage ConfigMgr's Hardware Inventory MOF Schema.
 
 ## **Usage:**
                 
@@ -14,16 +14,16 @@ Extension inventoryExtension = new InventoryExtension()
     SMSClassID = "MICROSOFT|PMPC_USERAPPS|1.0",
     ClassName = "PMPC_UserApps",
     SMSGroupName = "PMPC UserApps",
-    Properties = new string[]
+    Properties = new Dictionary<string, int>
     {
-        "InstallLocation",
-        "DisplayName",
-        "DisplayVersion",
-        "QuietUninstallString",
-        "UninstallString",
-        "Publisher",
-        "InstallDate",
-        "User"
+        {"InstallLocation", 8}
+        {"DisplayName", 8}
+        {"DisplayVersion", 8}
+        {"QuietUninstallString", 8}
+        {"UninstallString", 8}
+        {"Publisher", 8}
+        {"InstallDate", 8}
+        {"User" 8}
     }
 };
 
@@ -32,12 +32,8 @@ Extension[] inventoryExtensions = Schema.GetFromJson("pathToJson")
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//define connection options if required
 ConnectionOptions options = new ConnectionOptions();
 ManagementScope scope = new ManagementScope($@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}", options);
-
-//Or define scope as simple string
-string scope = $@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +41,6 @@ foreach ( Extension inventoryExtension in inventoryExtensions )
 {
   //Install
   inventoryExtension.Install(scope)  
-  
   //Enable
   inventoryExtension.Enable(scope);
 }
@@ -68,21 +63,30 @@ foreach ( Extension inventoryExtension in inventoryExtensions )
 - **Disable(scope)**:	Disables the class for reporting on default client settings.
 
 ### **Method Arguments**
-All Methods must be provided the **ManagementScope**. This is the Management Path to the SMS Provider Servers WMI Namespace:
+All Methods must be provided the **ManagementScope** Object. This is the Management Path to the SMS Provider Servers WMI Namespace
 ```csharp
 //define connection options if required
 ConnectionOptions options = new ConnectionOptions();
 ManagementScope scope = new ManagementScope($@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}", options);
-
-//Or define scope as simple string
-string scope = $@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}";
 ```
 
 ### **Properties**
 - **(String) SMSClassID**: The Class ID that will be used to generate the database table, view, and the UI SDK class.
 - **(String) ClassName**: The name of the WMI Class. 
-- **(String) SMSGroupName**: The default class name displayed in the MOF editor and Resource Explorer if no localized resources are provided.
-- **(String[]) Properties**: The list of properties belonging to the WMI Class to be inventoried. It is assumed that the first property in the array will be the key property in the database.
+- **(String) SMSGroupName**: The name displayed in the Resource Explorer and Hardware Inventory UI.
+- **(String) Namespace**: The WMI namespace
+- **(Dictionarty<string,int>) Properties**: Dictionary of properties belonging to the WMI Class to be inventoried. The first property in the dictionary will be used as the key in database table. The int defines the CIM type of the property. See list of Type codes:
+
+| Value | CIM Type |
+|----------|----------|
+| 8 | String |
+| 11 | Boolean |
+| 13 | Object |
+| 18 | Uint16 |
+| 19 | Uint32 |
+| 101 | DateTime |
+| 8200 | String[] |
+| 1210 | Uint16[] |
 
 # **Requirements**
-- **System.Management** Namespace (available as a Nuget Package in .NET Core)
+- **System.Management** (Nuget Package)
