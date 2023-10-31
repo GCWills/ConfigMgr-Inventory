@@ -1,4 +1,4 @@
-# **ConfurationManager.ManageObjectFormat**
+# **ConfigurationManager.ManageObjectFormat**
 
 ## **Summary:**
 Provides a simple interface to extend and manage ConfigMgr's Hardware Inventory MOF Schema.
