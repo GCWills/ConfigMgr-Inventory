@@ -14,7 +14,7 @@
     <PackageTags>ConfigMgr</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.0.3</VersionPrefix>
     <SignAssembly>False</SignAssembly>
     <Authors>GCWills</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
