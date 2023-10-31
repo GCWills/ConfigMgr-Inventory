@@ -9,13 +9,14 @@
     <Title>ConfigMgr Inventory Extension</Title>
     <Description>Extend and manage ConfigMgr's Hardware Inventory Schema locally or remotely</Description>
     <PackageId>ConfigurationManager.ManagedObjectFormat</PackageId>
-    <Company>GCWills</Company>
+    <Company>Patch My PC</Company>
     <RepositoryUrl>https://github.com/GCWills/ConfigMgr-Inventory</RepositoryUrl>
     <PackageTags>ConfigMgr</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <VersionPrefix>1.0.2</VersionPrefix>
     <SignAssembly>False</SignAssembly>
+    <Authors>GCWills</Authors>
   </PropertyGroup>
 
   <ItemGroup>
