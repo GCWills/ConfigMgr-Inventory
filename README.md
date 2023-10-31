@@ -1,4 +1,4 @@
-# **ConfigurationManager.ManageObjectFormat**
+# **ConfigurationManager.ManagedObjectFormat**
 
 ## **Summary:**
 Provides a simple interface to extend and manage ConfigMgr's Hardware Inventory MOF Schema.
@@ -11,10 +11,11 @@ Provides a simple interface to extend and manage ConfigMgr's Hardware Inventory 
 //Define Inventory Extension
 Extension inventoryExtension = new InventoryExtension()
 {
-    SMSClassID = "MICROSOFT|PMPC_USERAPPS|1.0",
-    ClassName = "PMPC_UserApps",
+    SMSClassID   = "MICROSOFT|PMPC_USERAPPS|1.0",
+    ClassName    = "PMPC_UserApps",
     SMSGroupName = "PMPC UserApps",
-    Properties = new Dictionary<string, int>
+    Namespace    =  "\\\\\\\\.\\\\root\\\\cimv2"
+    Properties   = new Dictionary<string, int>
     {
         {"InstallLocation", 8}
         {"DisplayName", 8}
@@ -67,7 +68,7 @@ All Methods must be provided the **ManagementScope** Object. This is the Managem
 ```csharp
 //define connection options if required
 ConnectionOptions options = new ConnectionOptions();
-ManagementScope scope = new ManagementScope($@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}", options);
+ManagementScope scope     = new ManagementScope($@"\\{smsProviderServer}\ROOT\SMS\site_{siteCode}", options);
 ```
 
 ### **Properties**
