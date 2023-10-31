@@ -49,12 +49,12 @@ foreach ( Extension inventoryExtension in inventoryExtensions )
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ```
 
-## **ConfigMgr.Inventory.Schema**
+## **Schema Class**
 
 ### **Methods**
 - **GetFromJson(path)** : Returns a collection of Extensions defined in the json.
 
-## **ConfigMgr.Inventory.Extension**
+## **Extension Class**
 
 ### **Methods**
 
