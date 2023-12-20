@@ -29,7 +29,7 @@ namespace ConfigurationManager.ManagedObjectFormat
         public Dictionary<string, int> Properties { get; set; }
 
         //Adds class to the schema but doesnt enable
-        public void Install(ManagementScope scope)
+        public Response Install(ManagementScope scope)
         {
             try
             {
@@ -55,7 +55,6 @@ namespace ConfigurationManager.ManagedObjectFormat
                         ManagementObject propertyObj = propertyClass.CreateInstance();
                         propertyObj["PropertyName"] = property.Key;
                         propertyObj["Type"] = property.Value;
-                        propertyObj["Width"] = 2048;
 
                         //First property provided will be the key because yes
                         if (i == 0)
@@ -71,17 +70,17 @@ namespace ConfigurationManager.ManagedObjectFormat
                     //Add the SMS_InventoryClassProperty[] to the SMS_InventoryClass.Properties
                     newClass["Properties"] = propertyValues;
                     newClass.Put();
-                    Console.WriteLine($"{ClassName} : INSTALLED");
+                    return new Response { Class = ClassName, Status = "INSTALLED" };
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ClassName} : FAILED TO INSTALL...: {ex.Message} || {ex.StackTrace}");
+                return new Response { Class = ClassName, Status = "FAILED" };
             }
         }
 
         //This completely deletes the class from the hardware inventory schema and marks all data related to the class for deletion in the database.
-        public void Uninstall(ManagementScope scope)
+        public Response Uninstall(ManagementScope scope)
         {
             try
             {
@@ -92,22 +91,22 @@ namespace ConfigurationManager.ManagedObjectFormat
 
                     if (smsInventoryClass == null)
                     {
-                        Console.WriteLine($"The {ClassName} provided for uninstall does not exist.");
-                        return;
+                        return new Response { Class = ClassName, Status = "DOES NOT EXIST" };
                     }
 
                     smsInventoryClass.Delete();
-                    Console.WriteLine($"{ClassName} : UNINSTALLED");
+                    return new Response { Class = ClassName, Status = "UNINSTALLED" };
+
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ClassName} : FAILED TO INSTALL...: {ex.Message} || {ex.StackTrace}");
+                return new Response { Class = ClassName, Status = "FAILED" };
             }
         }
 
         // Inventory classes may be "Installed" but not enabled for reporting. This method enables them for reporting on default client settings. This is the equivalent of ticking a class in the Hardware Inventory Client settings page.
-        public void Enable(ManagementScope scope)
+        public Response Enable(ManagementScope scope)
         {
             try
             {
@@ -133,17 +132,17 @@ namespace ConfigurationManager.ManagedObjectFormat
                     // Update the ReportClasses property of the inventory report with the new array
                     inventoryReport["ReportClasses"] = newReportClasses;
                     inventoryReport.Put();
-                    Console.WriteLine($"{ClassName} : ENABLED");
+                    return new Response { Class = ClassName, Status = "ENABLED" };
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ClassName} : FAILED TO ENABLE...: {ex.Message} || {ex.StackTrace}");
+                return new Response { Class = ClassName, Status = "FAILED" };
             }
         }
 
         //Disabling is the equivalent of unticking an "Installed" Inventory extension from the hardware inventory client settings page. Clients will no longer collect the data but existing data will not be deleted and inventory can resume anytime the class is enabled again.
-        public void Disable(ManagementScope scope)
+        public Response Disable(ManagementScope scope)
         {
             try
             {
@@ -160,15 +159,19 @@ namespace ConfigurationManager.ManagedObjectFormat
                 // Update the ReportClasses property of the inventory report
                 inventoryReport["ReportClasses"] = newReportClasses;
                 inventoryReport.Put();
-                Console.WriteLine($"{ClassName} : DISABLED");
+                return new Response { Class = ClassName, Status = "DIABLED" };
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ClassName} : FAILED TO DISABLE...: {ex.Message} || {ex.StackTrace}");
-
-                // Rethrow a different exception
-                throw new InvalidOperationException("Custom error message", ex);
+                return new Response { Class = ClassName, Status = "FAILED" };
             }
         }
+    }
+
+    public class Response
+    {
+        public string Class { get; set; }
+
+        public string Status { get; set; }
     }
 }
